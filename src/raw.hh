@@ -26,7 +26,6 @@ struct Image
     uint16_t* data;
 };
 
-Image*
-get_raw_image(const char* filename, const size_t width, const size_t height);
+Image* get_image(const char* filename, const size_t width, const size_t height);
 
 } // namespace raw

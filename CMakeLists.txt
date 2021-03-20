@@ -11,7 +11,7 @@ include_directories(src)
 
 set(SRC
     src/main.cc
-    src/raw_image.cc
+    src/raw.cc
 )
 
 

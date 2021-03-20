@@ -1,4 +1,4 @@
-#include "raw_image.hh"
+#include "raw.hh"
 #include <iostream>
 #include <sstream>
 
@@ -17,7 +17,7 @@ int main(int argc, const char* argv[])
     std::stringstream ss_height(argv[3]);
     ss_height >> height;
 
-    raw::Image* raw_image = raw::get_raw_image(argv[1], width, height);
+    raw::Image* raw_image = raw::get_image(argv[1], width, height);
 
     delete raw_image;
 

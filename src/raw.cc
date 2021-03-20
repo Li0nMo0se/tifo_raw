@@ -1,11 +1,11 @@
-#include "raw_image.hh"
+#include "raw.hh"
 #include <cassert>
 #include <cstdio>
 #include <iostream>
 
 namespace raw
 {
-static OutBatch read_batch(const InBatch& in)
+static OutBatch decode_batch(const InBatch& in)
 {
     // Make the interpretation of the input batch of bytes (size: 5)
     // Return the output batch according to the input (size: 4)
@@ -37,17 +37,10 @@ static OutBatch read_batch(const InBatch& in)
     return out;
 }
 
-Image*
-get_raw_image(const char* filename, const size_t width, const size_t height)
+static Image* decode_input(FILE* const f, const size_t size)
 {
-    // Open file
-    FILE* f = std::fopen(filename, "r");
-    if (!f)
-        std::cerr << "ERROR: cannot open " << filename << " for writing!\n";
-
-    size_t in_size = width * height;
     // Store input raw after decoding the input
-    Image* in_image = new Image(in_size);
+    Image* image = new Image(size);
 
     // Decode input
     size_t curr_index = 0;
@@ -58,21 +51,35 @@ get_raw_image(const char* filename, const size_t width, const size_t height)
     {
         assert(bytes_read == sizeof(InBatch));
         // Decode the 5 bytes into 4 bytes
-        OutBatch curr_out_batch = read_batch(curr_in_batch);
+        OutBatch curr_out_batch = decode_batch(curr_in_batch);
         // Store it in the raw
         for (uint8_t i = 0;
              i < sizeof(OutBatch) / sizeof(curr_out_batch.data[0]);
              i++)
         {
-            assert(curr_index < in_size);
-            in_image->data[curr_index++] = curr_out_batch.data[i];
+            assert(curr_index < size);
+            image->data[curr_index++] = curr_out_batch.data[i];
         }
         bytes_read = std::fread(curr_in_batch.data, 1, sizeof(InBatch), f);
     }
 
-    assert(curr_index == in_size); // Every pixel have been treated
+    assert(curr_index == size); // Every pixel have been treated
+    return image;
+}
 
-    return in_image;
+Image* get_image(const char* filename, const size_t width, const size_t height)
+{
+    // Open file
+    FILE* f = std::fopen(filename, "r");
+    if (!f)
+        std::cerr << "ERROR: cannot open " << filename << " for writing!\n";
+
+    const size_t in_size = width * height;
+    // Decode the input bytes to an ordered RAW image
+    Image* decoded_image = decode_input(f, in_size);
+
+    // FIXME:
+    return decoded_image;
 }
 
 } // namespace raw

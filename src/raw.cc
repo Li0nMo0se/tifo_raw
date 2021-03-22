@@ -1,6 +1,7 @@
 #include "raw.hh"
 #include <cassert>
 #include <cstdio>
+#include <fstream>
 #include <iostream>
 
 namespace raw
@@ -37,10 +38,12 @@ static OutBatch decode_batch(const InBatch& in)
     return out;
 }
 
-static Image* decode_input(FILE* const f, const size_t size)
+static Image*
+decode_input(FILE* const f, const size_t width, const size_t height)
 {
     // Store input raw after decoding the input
-    Image* image = new Image(size);
+    Image* image = new Image(width, height);
+    const size_t size = width * height;
 
     // Decode input
     size_t curr_index = 0;
@@ -57,29 +60,59 @@ static Image* decode_input(FILE* const f, const size_t size)
              i < sizeof(OutBatch) / sizeof(curr_out_batch.data[0]);
              i++)
         {
-            assert(curr_index < size);
             image->data[curr_index++] = curr_out_batch.data[i];
         }
         bytes_read = std::fread(curr_in_batch.data, 1, sizeof(InBatch), f);
     }
 
-    assert(curr_index == size); // Every pixel have been treated
+    // Every pixel have been processed
+    assert(curr_index == size);
     return image;
 }
 
-Image* get_image(const char* filename, const size_t width, const size_t height)
+Image* get_raw_image(const std::string& filename,
+                     const size_t width,
+                     const size_t height)
 {
     // Open file
-    FILE* f = std::fopen(filename, "r");
+    FILE* f = std::fopen(filename.c_str(), "r");
     if (!f)
         std::cerr << "ERROR: cannot open " << filename << " for writing!\n";
 
-    const size_t in_size = width * height;
     // Decode the input bytes to an ordered RAW image
-    Image* decoded_image = decode_input(f, in_size);
+    Image* decoded_image = decode_input(f, width, height);
 
-    // FIXME:
     return decoded_image;
+}
+
+void Image::save(const std::string& filename) const
+{
+    std::ofstream of(filename.c_str(),
+                     std::ios_base::out | std::ios_base::binary);
+
+    if (of.fail())
+    {
+        std::cerr << "Cannot save the image in the file " << filename
+                  << std::endl;
+        return;
+    }
+
+    of << "P5" << std::endl;
+    of << width << " " << height << std::endl;
+
+    // 2^10 - 1 as it is encoded on 10 bits
+    const uint16_t max_value = (1 << 10) - 1;
+    of << max_value << std::endl;
+
+    for (size_t y = 0; y < height; y++)
+    {
+        for (size_t x = 0; x < width; x++)
+        {
+            assert(data[y * width + x] <= max_value);
+            of << data[y * width + x];
+        }
+    }
+    of.close();
 }
 
 } // namespace raw

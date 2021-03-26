@@ -2,16 +2,16 @@
 
 #include <stdint.h>
 #include <string>
-
 namespace image
 {
+template <typename T, uint8_t depth>
 struct Image
 {
     Image(const size_t _width, const size_t _height)
         : width(_width)
         , height(_height)
     {
-        data = new uint16_t[width * height];
+        data = new T[width * height * depth];
     }
     ~Image() { delete[] data; }
 
@@ -23,8 +23,11 @@ struct Image
 
     const size_t width;
     const size_t height;
-    uint16_t* data;
-
-    static constexpr uint16_t max_value = 1023; // 2^10
+    T* data;
 };
+
+using Gray16 = Image<uint16_t, 1>;
+using RGB16 = Image<uint16_t, 3>;
 } // namespace image
+
+#include "image.hxx"

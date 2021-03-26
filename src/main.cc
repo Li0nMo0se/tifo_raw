@@ -18,7 +18,7 @@ int main(int argc, const char* argv[])
     std::stringstream ss_height(argv[3]);
     ss_height >> height;
 
-    image::Image* raw_image = raw::get_raw_image(argv[1], width, height);
+    image::Gray16* raw_image = raw::get_raw_image(argv[1], width, height);
 
     // Black point detection
     uint16_t r_min;

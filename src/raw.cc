@@ -38,11 +38,11 @@ static OutBatch decode_batch(const InBatch& in)
     return out;
 }
 
-static image::Image*
+static image::Gray16*
 decode_input(FILE* const f, const size_t width, const size_t height)
 {
     // Store input raw after decoding the input
-    image::Image* image = new image::Image(width, height);
+    image::Gray16* image = new image::Gray16(width, height);
 
     // Decode input
     size_t curr_index = 0;
@@ -69,9 +69,9 @@ decode_input(FILE* const f, const size_t width, const size_t height)
     return image;
 }
 
-image::Image* get_raw_image(const std::string& filename,
-                            const size_t width,
-                            const size_t height)
+image::Gray16* get_raw_image(const std::string& filename,
+                             const size_t width,
+                             const size_t height)
 {
     // Open file
     FILE* f = std::fopen(filename.c_str(), "r");
@@ -79,7 +79,7 @@ image::Image* get_raw_image(const std::string& filename,
         std::cerr << "ERROR: cannot open " << filename << " for writing!\n";
 
     // Decode the input bytes to an ordered RAW image
-    image::Image* decoded_image = decode_input(f, width, height);
+    image::Gray16* decoded_image = decode_input(f, width, height);
 
     return decoded_image;
 }

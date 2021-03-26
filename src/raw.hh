@@ -17,8 +17,8 @@ struct Batch
 using InBatch = Batch<uint8_t, 5>;
 using OutBatch = Batch<uint16_t, 4>;
 
-image::Image* get_raw_image(const std::string& filename,
-                            const size_t width,
-                            const size_t height);
+image::Gray16* get_raw_image(const std::string& filename,
+                             const size_t width,
+                             const size_t height);
 
 } // namespace raw

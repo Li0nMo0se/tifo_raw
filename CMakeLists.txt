@@ -13,7 +13,6 @@ set(SRC
     src/main.cc
     src/raw.cc
     src/tools.cc
-    src/image.cc
 )
 
 

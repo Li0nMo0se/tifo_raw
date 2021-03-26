@@ -5,7 +5,9 @@
 
 namespace image
 {
-void Image::save(const std::string& filename) const
+
+template <typename T, uint8_t depth>
+void Image<T, depth>::save(const std::string& filename) const
 {
     std::ofstream of(filename.c_str(),
                      std::ios_base::out | std::ios_base::binary);
@@ -17,7 +19,13 @@ void Image::save(const std::string& filename) const
         return;
     }
 
-    of << "P5" << std::endl;
+    if constexpr (depth == 1)
+        of << "P5" << std::endl;
+    else if constexpr (depth == 3)
+        of << "P6" << std::endl;
+    else
+        assert(false); // Can't static assert here
+
     of << width << " " << height << std::endl;
 
     // 2^10 - 1 as it is encoded on 10 bits

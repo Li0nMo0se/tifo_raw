@@ -2,14 +2,14 @@
 
 namespace tools
 {
-void black_point_detection(const image::Image& im,
+void black_point_detection(const image::Gray16& im,
                            uint16_t& r_min,
                            uint16_t& g_min,
                            uint16_t& b_min)
 {
-    r_min = image::Image::max_value;
-    g_min = image::Image::max_value;
-    b_min = image::Image::max_value;
+    r_min = 1023; // 2^10 - 1
+    g_min = 1023;
+    b_min = 1023;
 
     for (size_t y = 0; y < im.height; y++)
     {
@@ -26,7 +26,7 @@ void black_point_detection(const image::Image& im,
     }
 }
 
-void substract_min(const image::Image& im,
+void substract_min(const image::Gray16& im,
                    const uint16_t& r_min,
                    const uint16_t& g_min,
                    const uint16_t& b_min)
@@ -45,5 +45,11 @@ void substract_min(const image::Image& im,
         }
     }
 }
+
+/*
+image::Image<uint16_t, 3>* debayering(const image::Gray16& im)
+{
+    // image::Image<uint16_t, 3> mi*
+}*/
 
 } // namespace tools

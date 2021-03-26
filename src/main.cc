@@ -1,4 +1,5 @@
 #include "raw.hh"
+#include "tools.hh"
 #include <iostream>
 #include <sstream>
 
@@ -18,6 +19,15 @@ int main(int argc, const char* argv[])
     ss_height >> height;
 
     raw::Image* raw_image = raw::get_raw_image(argv[1], width, height);
+
+    // Black point detection
+    uint16_t r_min;
+    uint16_t g_min;
+    uint16_t b_min;
+    tools::black_point_detection(*raw_image, r_min, g_min, b_min);
+
+    std::cout << "Black point detection: (" << r_min << ',' << g_min << ','
+              << b_min << ')' << std::endl;
 
     raw_image->save(std::string(argv[1]) + ".new");
 

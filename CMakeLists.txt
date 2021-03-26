@@ -12,6 +12,7 @@ include_directories(src)
 set(SRC
     src/main.cc
     src/raw.cc
+    src/tools.cc
 )
 
 

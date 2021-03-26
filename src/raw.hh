@@ -35,6 +35,8 @@ struct Image
     const size_t width;
     const size_t height;
     uint16_t* data;
+
+    static constexpr uint16_t max_value = 1023; // 2^10
 };
 
 Image* get_raw_image(const std::string& filename,

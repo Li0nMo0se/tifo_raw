@@ -43,7 +43,6 @@ decode_input(FILE* const f, const size_t width, const size_t height)
 {
     // Store input raw after decoding the input
     Image* image = new Image(width, height);
-    const size_t size = width * height;
 
     // Decode input
     size_t curr_index = 0;
@@ -66,7 +65,7 @@ decode_input(FILE* const f, const size_t width, const size_t height)
     }
 
     // Every pixel have been processed
-    assert(curr_index == size);
+    assert(curr_index == image->width * image->height);
     return image;
 }
 

@@ -4,7 +4,11 @@
 #include <string>
 namespace image
 {
-template <typename T, uint8_t depth>
+
+template <typename T>
+concept Integral = std::is_integral<T>::value;
+
+template <Integral T, uint8_t depth>
 struct Image
 {
     Image(const size_t _width, const size_t _height)
@@ -19,7 +23,7 @@ struct Image
     Image& operator=(const Image&) = delete;
 
     // Save to PGM (grayscale PPM)
-    void save(const std::string& filename) const;
+    void save(const std::string& filename, const uint8_t depth_bits) const;
 
     const size_t width;
     const size_t height;

@@ -7,7 +7,8 @@ namespace image
 {
 
 template <typename T, uint8_t depth>
-void Image<T, depth>::save(const std::string& filename) const
+void Image<T, depth>::save(const std::string& filename,
+                           const uint8_t depth_bits) const
 {
     std::ofstream of(filename.c_str(),
                      std::ios_base::out | std::ios_base::binary);
@@ -19,25 +20,31 @@ void Image<T, depth>::save(const std::string& filename) const
         return;
     }
 
-    if constexpr (depth == 1)
+    if constexpr (depth == 1) // grayscale
         of << "P5" << std::endl;
-    else if constexpr (depth == 3)
+    else if constexpr (depth == 3) // rgb
         of << "P6" << std::endl;
     else
         assert(false); // Can't static assert here
 
     of << width << " " << height << std::endl;
-
-    // 2^10 - 1 as it is encoded on 10 bits
-    const uint16_t max_value = (1 << 10) - 1;
+    constexpr unsigned int max_value = 255;
     of << max_value << std::endl;
 
-    for (size_t y = 0; y < height; y++)
+    // We only write 1 byte for each channel so we would need to right shift if
+    // the data is larger than 1 byte
+    const uint8_t shift = depth_bits - sizeof(uint8_t) * 8;
+    for (size_t y = 0; y < height; y++) // height
     {
-        for (size_t x = 0; x < width; x++)
+        for (size_t x = 0; x < width; x++) // width
         {
-            assert(data[y * width + x] <= max_value);
-            of << data[y * width + x];
+            const size_t index = y * width + x;
+            for (uint8_t i = 0; i < depth; i++) // depth
+            {
+                unsigned char value = data[index + i] >> shift;
+                assert(value <= max_value);
+                of << value;
+            }
         }
     }
     of.close();

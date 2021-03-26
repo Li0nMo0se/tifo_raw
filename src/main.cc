@@ -18,7 +18,7 @@ int main(int argc, const char* argv[])
     std::stringstream ss_height(argv[3]);
     ss_height >> height;
 
-    raw::Image* raw_image = raw::get_raw_image(argv[1], width, height);
+    image::Image* raw_image = raw::get_raw_image(argv[1], width, height);
 
     // Black point detection
     uint16_t r_min;
@@ -28,6 +28,8 @@ int main(int argc, const char* argv[])
 
     std::cout << "Black point detection: (" << r_min << ',' << g_min << ','
               << b_min << ')' << std::endl;
+
+    tools::substract_min(*raw_image, r_min, g_min, b_min);
 
     raw_image->save(std::string(argv[1]) + ".new");
 

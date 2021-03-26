@@ -18,22 +18,23 @@ int main(int argc, const char* argv[])
     std::stringstream ss_height(argv[3]);
     ss_height >> height;
 
+    constexpr uint8_t depth_bits = 10;
     image::Gray16* raw_image = raw::get_raw_image(argv[1], width, height);
+    raw_image->save(std::string(argv[1]) + ".pgm", depth_bits);
 
     // Black point detection
     uint16_t r_min;
     uint16_t g_min;
     uint16_t b_min;
     tools::black_point_detection(*raw_image, r_min, g_min, b_min);
-
-    std::cout << "Black point detection: (" << r_min << ',' << g_min << ','
-              << b_min << ')' << std::endl;
-
     tools::substract_min(*raw_image, r_min, g_min, b_min);
 
-    raw_image->save(std::string(argv[1]) + ".new");
+    image::RGB16* rgb_image = tools::debayering(*raw_image);
+
+    rgb_image->save(std::string(argv[1]) + ".ppm", depth_bits);
 
     delete raw_image;
+    delete rgb_image;
 
     return 0;
 }

@@ -14,5 +14,5 @@ void substract_min(const image::Gray16& im,
                    const uint16_t& g_min,
                    const uint16_t& b_min);
 
-// image::Image<uint16_t, 3>* debayering(const image::Gray16& im);
+image::RGB16* debayering(const image::Gray16& im);
 } // namespace tools

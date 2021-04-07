@@ -27,9 +27,9 @@ void black_point_detection(const image::Gray16& im,
 }
 
 void substract_min(const image::Gray16& im,
-                   const uint16_t& r_min,
-                   const uint16_t& g_min,
-                   const uint16_t& b_min)
+                   const uint16_t r_min,
+                   const uint16_t g_min,
+                   const uint16_t b_min)
 {
     for (size_t y = 0; y < im.height; y++)
     {

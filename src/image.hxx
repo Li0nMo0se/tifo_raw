@@ -21,15 +21,15 @@ void Image<T, depth>::save(const std::string& filename,
     }
 
     if constexpr (depth == 1) // grayscale
-        of << "P5" << std::endl;
+        of << "P5" << '\n';
     else if constexpr (depth == 3) // rgb
-        of << "P6" << std::endl;
+        of << "P6" << '\n';
     else
         assert(false); // Can't static assert here
 
-    of << width << " " << height << std::endl;
+    of << width << " " << height << '\n';
     constexpr unsigned int max_value = 255;
-    of << max_value << std::endl;
+    of << max_value << '\n';
 
     // We only write 1 byte for each channel so we would need to right shift if
     // the data is larger than 1 byte
@@ -41,7 +41,7 @@ void Image<T, depth>::save(const std::string& filename,
             const size_t index = y * width + x;
             for (uint8_t i = 0; i < depth; i++) // depth
             {
-                unsigned char value = data[index + i] >> shift;
+                const uint8_t value = data[index * depth + i] >> shift;
                 assert(value <= max_value);
                 of << value;
             }

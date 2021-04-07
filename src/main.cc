@@ -44,7 +44,7 @@ int main(int argc, const char* argv[])
 
     tools::white_balance(*rgb_image, gain_r, gain_b);
 
-    rgb_image->save(std::string(argv[1]) + "whitebalance.ppm", depth_bits);
+    rgb_image->save(std::string(argv[1]) + ".whitebalance.ppm", depth_bits);
 
     delete raw_image;
     delete rgb_image;

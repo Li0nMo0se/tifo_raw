@@ -242,4 +242,33 @@ image::RGB16* debayering(const image::Gray16& in_im)
     return out_im;
 }
 
+template <typename T, typename U>
+static T clamp(const U value, const T max_value)
+{
+    if (value < static_cast<U>(0))
+        return static_cast<T>(0);
+    else if (value > max_value)
+        return static_cast<T>(max_value);
+    else
+        return static_cast<T>(value);
+}
+
+void white_balance(image::RGB16& im, const float gain_r, const float gain_b)
+{
+    uint16_t* const data = im.data;
+    constexpr uint16_t max_value = 1023;
+
+    for (size_t index = 0; index < im.width * im.height; index++)
+    {
+        const size_t rgb_index = index * 3;
+        // Red
+        const float red = static_cast<float>(data[rgb_index]) * gain_r;
+        data[rgb_index] = clamp(red, max_value);
+        // Green not normalized
+        // Blue
+        const float blue = static_cast<float>(data[rgb_index + 2]) * gain_b;
+        data[rgb_index + 2] = clamp(blue, max_value);
+    }
+}
+
 } // namespace tools

@@ -15,4 +15,7 @@ void substract_min(const image::Gray16& im,
                    const uint16_t b_min);
 
 image::RGB16* debayering(const image::Gray16& im);
+
+void white_balance(image::RGB16& im, const float gain_r, const float gain_b);
+
 } // namespace tools

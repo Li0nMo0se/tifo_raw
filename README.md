@@ -6,15 +6,20 @@ Generate RGB image from a raw image captured
 
 1. Get raw image
 
-![](data/image_as_jpeg_for_readme/image.result_gray.jpeg)
+<img src="data/image_as_jpeg_for_readme/image.result_gray.jpeg" width="350">
+
 2. Black point detection (compuite minimum of each channel)
+
 3. Substract channel minimum over each channel
+
 4. Debayering
 
-![](data/image_as_jpeg_for_readme/image.result_rgb.jpeg)
+<img src="data/image_as_jpeg_for_readme/image.result_rgb.jpeg" width="350">
+
 5. White balance
 
-![](data/image_as_jpeg_for_readme/image.whitebalance.result.jpeg)
+<img src="data/image_as_jpeg_for_readme/image.whitebalance.result.jpeg" width="350">
+
 ## Build
 
 * Requires [cmake](https://cmake.org/download/)

@@ -8,7 +8,7 @@ Generate RGB image from a raw image captured
 
 <img src="data/image_as_jpeg_for_readme/image.result_gray.jpeg" width="350">
 
-2. Black point detection (compuite minimum of each channel)
+2. Black point detection (compute minimum of each channel)
 
 3. Substract channel minimum over each channel
 
